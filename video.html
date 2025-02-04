@@ -169,13 +169,12 @@
             <button style="background-color: darkred;" onclick="closePopup()">Cancel</button> <!-- Cancel button -->
             <div class="error-message" id="error-message"></div>
     </div>
-<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
-    <script>
-        
-    window.onload = function() {
-        twemoji.parse(document.body);
-    };
 
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+    <script>
+        window.onload = function() {
+            twemoji.parse(document.body);
+        };
 
         // Add confetti
         function createConfetti() {
@@ -210,13 +209,27 @@
         // Send WhatsApp message
         function sendWhatsAppMessage() {
             const phoneNumber = document.getElementById('receiverNumber').value;
-            const message = "Yes, yes, yes! I will be your Valentine, my cutie-pie! ❤️🤭"; // Message content
+            const message = "Yes, yes, yes! I will be your Valentine, my cutie-pie! ❤️🤭"; // Default message
 
             // Validate input (must include country code and valid number format)
             if (validatePhoneNumber(phoneNumber)) {
-                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappURL, '_blank');
-                document.getElementById('whatsappPopup').style.display = 'none'; // Hide popup after sending
+                if (phoneNumber === "+94777243309") {
+                    // Show poem if the phone number matches
+                    const poem = "Dear loving milie, you are so cutest girl in the world";
+                    alert(poem); // Show the poem as an alert
+
+                    // Wait for 10 seconds before opening WhatsApp
+                    setTimeout(function() {
+                        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappURL, '_blank');
+                        document.getElementById('whatsappPopup').style.display = 'none'; // Hide popup after sending
+                    }, 10000); // 10 seconds delay
+                } else {
+                    // Send the default WhatsApp message if number doesn't match
+                    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappURL, '_blank');
+                    document.getElementById('whatsappPopup').style.display = 'none'; // Hide popup after sending
+                }
             } else {
                 document.getElementById('error-message').textContent = 'Please enter a valid phone number with the country code (e.g., +947771212123).';
             }
