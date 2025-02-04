@@ -116,13 +116,47 @@
 
         .popup input::placeholder {
             font-size: 0.8em;
-            /* Adjust the size as needed */
         }
 
         .error-message {
             color: red;
             font-size: 1em;
             margin-top: 10px;
+        }
+
+        /* Custom poem modal */
+        .poem-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            z-index: 20;
+        }
+
+        .poem-popup p {
+            font-size: 1.2em;
+            white-space: pre-wrap;
+        }
+
+        .poem-popup button {
+            padding: 10px 20px;
+            background: #ff1493;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .poem-popup button:hover {
+            background: #ff69b4;
         }
 
         @keyframes glow {
@@ -160,14 +194,19 @@
         <button class="back-btn" onclick="showPopup()">Send 'YES' to Your cutie-pie</button>
     </div>
 
+    <!-- Poem Modal -->
+    <div class="poem-popup" id="poemPopup">
+        <p id="poemText"></p>
+        <button onclick="sendWhatsAppMessageFromPoem()">OK</button>
+    </div>
+
     <!-- Popup for WhatsApp -->
     <div class="popup" id="whatsappPopup">
         <h5>Send "YES" to Your cutie-pie </h5>
-            <br>
-            <input type="text" id="receiverNumber" placeholder="Enter receiver's WhatsApp number (with country code)">
-            <button onclick="sendWhatsAppMessage()">Send</button>
-            <button style="background-color: darkred;" onclick="closePopup()">Cancel</button> <!-- Cancel button -->
-            <div class="error-message" id="error-message"></div>
+        <input type="text" id="receiverNumber" placeholder="Enter receiver's WhatsApp number (with country code)">
+        <button onclick="sendWhatsAppMessage()">Send</button>
+        <button style="background-color: darkred;" onclick="closePopup()">Cancel</button>
+        <div class="error-message" id="error-message"></div>
     </div>
 
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
@@ -206,6 +245,23 @@
             return phoneRegex.test(phoneNumber);
         }
 
+        // Show Poem and OK button
+        function showPoem() {
+            const poem = "Dear loving milie,\n\nFor My Heart's Forever\n\nIn your eyes, I find my home,\nA place of peace where love has grown.\nWith every smile, you light the way,\nTurning the darkest night to day.\n\nYou’re my strength, my guiding star,\nAlways near, no matter how far.\nThrough every storm, through every trial,\nYou stand by me with love, with style.\n\nYour kindness, grace, and tender care\nAre gifts so pure, beyond compare.\nWith every little thing you do,\nI feel so lucky, loved, and true.\n\nSo here's my heart, forever yours,\nTo cherish, love, and all adore.\nFor you’re my light, my endless bliss,\nMy sweetest girl, my heart’s true wish.";
+            document.getElementById('poemText').textContent = poem;
+            document.getElementById('poemPopup').style.display = 'block';
+        }
+
+        // Send WhatsApp message after poem popup
+        function sendWhatsAppMessageFromPoem() {
+            const phoneNumber = document.getElementById('receiverNumber').value;
+            const message = "Yes, yes, yes! I will be your Valentine, my cutie-pie! ❤️🤭"; // Default message
+
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+            document.getElementById('poemPopup').style.display = 'none'; // Hide the poem popup after sending
+        }
+
         // Send WhatsApp message
         function sendWhatsAppMessage() {
             const phoneNumber = document.getElementById('receiverNumber').value;
@@ -214,16 +270,7 @@
             // Validate input (must include country code and valid number format)
             if (validatePhoneNumber(phoneNumber)) {
                 if (phoneNumber === "+94777243309") {
-                    // Show poem if the phone number matches
-                    const poem = "Dear loving milie,\n\nFor My Heart's Forever\n\nIn your eyes, I find my home,\nA place of peace where love has grown.\nWith every smile, you light the way,\nTurning the darkest night to day.\n\nYou’re my strength, my guiding star,\nAlways near, no matter how far.\nThrough every storm, through every trial,\nYou stand by me with love, with style.\n\nYour kindness, grace, and tender care\nAre gifts so pure, beyond compare.\nWith every little thing you do,\nI feel so lucky, loved, and true.\nSo here's my heart, forever yours,\nTo cherish, love, and all adore.\nFor you’re my light, my endless bliss,\nMy sweetest girl, my heart’s true wish.";
-                    alert(poem); // Show the poem as an alert
-
-                    // Wait for 10 seconds before opening WhatsApp
-                    setTimeout(function() {
-                        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                        window.open(whatsappURL, '_blank');
-                        document.getElementById('whatsappPopup').style.display = 'none'; // Hide popup after sending
-                    }, 10000); // 10 seconds delay
+                    showPoem();
                 } else {
                     // Send the default WhatsApp message if number doesn't match
                     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
