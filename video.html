@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             min-height: 100vh;
             background: #000;
             overflow: hidden;
+            font-family: Arial, sans-serif;
         }
 
         #videoContainer {
@@ -38,7 +40,7 @@
             color: #fff;
             text-align: center;
             padding-top: 20vh;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         h2 {
@@ -55,7 +57,7 @@
         .back-btn {
             padding: 15px 30px;
             font-size: 1.2em;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: 2px solid #fff;
             color: #fff;
             border-radius: 30px;
@@ -64,7 +66,7 @@
         }
 
         .back-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .confetti {
@@ -74,17 +76,77 @@
             animation: confetti-fall 3s linear infinite;
         }
 
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #fff;
+            width: 80%;
+        }
+
+        .popup button {
+            padding: 10px 20px;
+            background: #ff1493;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .popup button:hover {
+            background: #ff69b4;
+        }
+
+        .popup input::placeholder {
+            font-size: 0.8em;
+            /* Adjust the size as needed */
+        }
+
+        .error-message {
+            color: red;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
         @keyframes glow {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073; }
-            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6; }
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
+            }
+
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
         }
 
         @keyframes confetti-fall {
-            0% { transform: translateY(-100vh) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(360deg); }
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="videoContainer">
         <video id="celebrationVideo" autoplay muted loop>
@@ -93,22 +155,64 @@
     </div>
 
     <div class="celebration-content">
-        <h2>YAY! You Said YES! 🎉💖</h2>
+        <h2>YAY! You Said YES! 💖</h2>
         <p>This is the beginning of something amazing! 🌟</p>
-        <!--<button class="back-btn" onclick="window.location.href='index.html'">Click to Relive the Moment!</button>-->
+        <button class="back-btn" onclick="showPopup()">Send 'YES' to Your cutie-pie</button>
+    </div>
+
+    <!-- Popup for WhatsApp -->
+    <div class="popup" id="whatsappPopup">
+        <h5>Send "YES" to Your cutie-pie </h3>
+            <br>
+            <input type="text" id="receiverNumber" placeholder="Enter receiver's WhatsApp number (with country code)">
+            <button onclick="sendWhatsAppMessage()">Send</button>
+            <button style="background-color: darkred;" onclick="closePopup()">Cancel</button> <!-- Cancel button -->
+            <div class="error-message" id="error-message"></div>
     </div>
 
     <script>
         // Add confetti
         function createConfetti() {
             const colors = ['#ff69b4', '#ff1493', '#00ffff', '#ffff00', '#7fff00'];
-            for(let i = 0; i < 100; i++) {
+            for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
                 document.body.appendChild(confetti);
+            }
+        }
+
+        // Show WhatsApp message popup
+        function showPopup() {
+            document.getElementById('whatsappPopup').style.display = 'block';
+            document.getElementById('error-message').textContent = ''; // Reset error message
+        }
+
+        // Close the popup
+        function closePopup() {
+            document.getElementById('whatsappPopup').style.display = 'none';
+        }
+
+        // Validate WhatsApp number (starts with + and contains only digits)
+        function validatePhoneNumber(phoneNumber) {
+            const phoneRegex = /^\+(\d{1,4})\d{7,}$/; // Simple regex for validating international numbers
+            return phoneRegex.test(phoneNumber);
+        }
+
+        // Send WhatsApp message
+        function sendWhatsAppMessage() {
+            const phoneNumber = document.getElementById('receiverNumber').value;
+            const message = "YES! YES! YES!❤️🤭"; // Message content
+
+            // Validate input (must include country code and valid number format)
+            if (validatePhoneNumber(phoneNumber)) {
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank');
+                document.getElementById('whatsappPopup').style.display = 'none'; // Hide popup after sending
+            } else {
+                document.getElementById('error-message').textContent = 'Please enter a valid phone number with the country code (e.g., +1234567890).';
             }
         }
 
@@ -120,4 +224,5 @@
         });
     </script>
 </body>
+
 </html>
