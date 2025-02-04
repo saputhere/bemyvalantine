@@ -171,6 +171,13 @@
     </div>
 
     <script>
+        <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+<script>
+    window.onload = function() {
+        twemoji.parse(document.body);
+    };
+</script>
+
         // Add confetti
         function createConfetti() {
             const colors = ['#ff69b4', '#ff1493', '#00ffff', '#ffff00', '#7fff00'];
@@ -204,7 +211,7 @@
         // Send WhatsApp message
         function sendWhatsAppMessage() {
             const phoneNumber = document.getElementById('receiverNumber').value;
-            const message = "YES! YES! YES!❤️🤭"; // Message content
+            const message = "YES! YES! YES! "; // Message content
 
             // Validate input (must include country code and valid number format)
             if (validatePhoneNumber(phoneNumber)) {
