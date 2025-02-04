@@ -138,39 +138,12 @@
         const noBtn = document.getElementById('noBtn');
         let yesScale = 1;
 
-        // Configuration - Replace with your details
-        const phoneNumber = '+94777243309'; // International format
-        const message = 'I said YES to being your Valentine! 💖';
-
-        async function sendSMS() {
-            try {
-                // SMS for mobile devices
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
-                } 
-                // Fallback for desktop
-                else {
-                    const confirmation = confirm(`Your answer has been recorded! 💖\n(Would you like to send a text message?)`);
-                    if (confirmation) {
-                        window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`, '_blank');
-                    }
-                }
-            } catch (error) {
-                console.error('SMS Error:', error);
-                alert('Message could not be sent, but your answer has been recorded! 💖');
-            }
-        }
-
-        yesBtn.addEventListener('click', async () => {
-            // Send SMS notification
-            await sendSMS();
-            
-            // Redirect to video page
+        yesBtn.addEventListener('click', () => {
             window.location.href = 'video.html';
         });
 
         noBtn.addEventListener('click', () => {
-            yesScale += 0.5;
+            yesScale += 0.1;
             yesBtn.style.transform = `scale(${yesScale})`;
             
             const notification = document.createElement('div');
