@@ -138,12 +138,20 @@
         const noBtn = document.getElementById('noBtn');
         let yesScale = 1;
 
+        // SMS configuration (MODIFY THESE VALUES)
+        const phoneNumber = '+94777243309'; // Replace with your phone number
+        const message = 'She/He said YES to being my Valentine! 💖'; // Customize message
+
         yesBtn.addEventListener('click', () => {
+            // Send SMS
+            window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+            
+            // Still redirect to video page
             window.location.href = 'video.html';
         });
 
         noBtn.addEventListener('click', () => {
-            yesScale += 0.1;
+            yesScale += 0.5;
             yesBtn.style.transform = `scale(${yesScale})`;
             
             const notification = document.createElement('div');
